@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>记忆力测试游戏</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #progress-bar {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .progress-cell {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ccc;
+            margin: 0 2px;
+        }
+        .progress-cell.correct { background-color: green; }
+        .progress-cell.incorrect { background-color: red; }
+    </style>
+</head>
+<body>
+    <h1>记忆力测试游戏</h1>
+    <div id="progress-bar">
+        <!-- 20个关卡进度格子 -->
+        <!-- 将由JavaScript动态生成 -->
+    </div>
+    <div id="game-area">
+        <h2>游戏规则</h2>
+        <p>游戏共20关，每关5秒记忆数字，难度递增</p>
+        <button id="start-btn">开始游戏</button>
+    </div>
+    <script>
+        class MemoryGame {
+            constructor() {
+                this.currentLevel = 1;
+                this.totalScore = 0;
+                this.progressBar = document.getElementById('progress-bar');
+                this.gameArea = document.getElementById('game-area');
+                this.initProgressBar();
+            }
+
+            initProgressBar() {
+                for (let i = 0; i < 20; i++) {
+                    const cell = document.createElement('div');
+                    cell.classList.add('progress-cell');
+                    this.progressBar.appendChild(cell);
+                }
+            }
+
+            startGame() {
+                if (this.currentLevel > 20) {
+                    this.showFinalScore();
+                    return;
+                }
+
+                const number = this.generateNumber(this.currentLevel);
+                this.showNumber(number);
+            }
+
+            generateNumber(digits) {
+                return Math.floor(Math.random() * Math.pow(10, digits)).toString().padStart(digits, '0');
+            }
+
+            showNumber(number) {
+                this.gameArea.innerHTML = `
+                    <h2>第 ${this.currentLevel} 关</h2>
+                    <p>记住这个数字: ${number}</p>
+                    <div id="countdown">5</div>
+                `;
+
+                const countdownEl = document.getElementById('countdown');
+                let countdown = 5;
+                const timer = setInterval(() => {
+                    countdown--;
+                    countdownEl.textContent = countdown;
+                    if (countdown === 0) {
+                        clearInterval(timer);
+                        this.showInputField(number);
+                    }
+                }, 1000);
+            }
+
+            showInputField(correctNumber) {
+                this.gameArea.innerHTML = `
+                    <h2>输入你记忆的数字</h2>
+                    <input type="text" id="user-input">
+                    <button id="submit-btn">提交</button>
+                `;
+
+                const submitBtn = document.getElementById('submit-btn');
+                submitBtn.onclick = () => this.checkAnswer(correctNumber);
+            }
+
+            checkAnswer(correctNumber) {
+                const userInput = document.getElementById('user-input').value;
+                const progressCell = this.progressBar.children[this.currentLevel - 1];
+
+                if (userInput === correctNumber) {
+                    progressCell.classList.add('correct');
+                    this.totalScore += this.currentLevel * 5;
+                } else {
+                    progressCell.classList.add('incorrect');
+                }
+
+                this.currentLevel++;
+                this.startGame();
+            }
+
+            showFinalScore() {
+                this.gameArea.innerHTML = `
+                    <h2>游戏结束</h2>
+                    <p>你的总分: ${this.totalScore}</p>
+                    <p>${this.totalScore >= 840 ? '优秀!' : '继续加油!'}</p>
+                `;
+            }
+        }
+
+        document.getElementById('start-btn').onclick = () => {
+            const game = new MemoryGame();
+            game.startGame();
+        };
+    </script>
+</body>
+</html> 

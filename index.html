@@ -1,101 +1,56 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Flappy Bird Diagnostic</title>
-  <meta charset="UTF-8">
-  <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.min.js"></script>
-  <style>
-    #diagnostic-panel {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      padding: 10px;
-      z-index: 1000;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Memory Test - Improve Your Memory Skills</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .game-container {
+            width: 100%;
+            height: 600px;
+            border: none;
+        }
+    </style>
 </head>
 <body>
-  <div id="diagnostic-panel">
-    <div id="browser-info">浏览器检测中...</div>
-    <div id="phaser-info">Phaser检测中...</div>
-    <div id="game-status">游戏状态：未初始化</div>
-  </div>
-  <div id="game-container"></div>
+    <header>
+        <h1>Memory Test: Train Your Brain</h1>
+        <p>Challenge yourself with our progressive memory training game!</p>
+    </header>
 
-  <script>
-    // 浏览器兼容性检测
-    function detectBrowserInfo() {
-      const info = document.getElementById('browser-info');
-      info.innerHTML = `
-        浏览器: ${navigator.userAgent}
-        WebGL支持: ${!!window.WebGLRenderingContext}
-        Canvas支持: ${!!document.createElement('canvas').getContext}
-      `;
-    }
+    <section>
+        <h2>Game Rules</h2>
+        <p>Test and improve your memory with our 20-level challenge:</p>
+        <ul>
+            <li>Start with 1-digit numbers and progress to 20-digit numbers</li>
+            <li>5 seconds to memorize each number</li>
+            <li>Score increases with each level</li>
+        </ul>
+    </section>
 
-    // Phaser诊断
-    function diagnosticPhaser() {
-      const phaserInfo = document.getElementById('phaser-info');
-      const gameStatus = document.getElementById('game-status');
+    <section>
+        <h2>Play Now!</h2>
+        <iframe src="game.html" class="game-container"></iframe>
+    </section>
 
-      if (typeof Phaser === 'undefined') {
-        phaserInfo.innerHTML = 'Phaser加载失败';
-        return false;
-      }
+    <section>
+        <h2>Scoring System</h2>
+        <p>Total possible score: 1050 points</p>
+        <ul>
+            <li>Level 1: 5 points</li>
+            <li>Level 20: 100 points</li>
+            <li>Score 840+ points: Excellent performance!</li>
+        </ul>
+    </section>
 
-      phaserInfo.innerHTML = `Phaser版本: ${Phaser.VERSION}`;
-      return true;
-    }
-
-    // 游戏场景诊断
-    class DiagnosticScene extends Phaser.Scene {
-      constructor() {
-        super('DiagnosticScene');
-      }
-
-      preload() {
-        this.load.image('diagnostic_bird', 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==');
-      }
-
-      create() {
-        const gameStatus = document.getElementById('game-status');
-        gameStatus.innerHTML = '游戏场景创建成功';
-
-        const bird = this.add.sprite(100, 100, 'diagnostic_bird');
-        
-        this.input.keyboard.on('keydown-SPACE', () => {
-          gameStatus.innerHTML = '键盘事件正常';
-        });
-      }
-    }
-
-    function initGame() {
-      detectBrowserInfo();
-      
-      if (!diagnosticPhaser()) {
-        return;
-      }
-
-      const config = {
-        type: Phaser.AUTO,
-        width: 800,
-        height: 600,
-        parent: 'game-container',
-        scene: DiagnosticScene
-      };
-
-      try {
-        new Phaser.Game(config);
-      } catch (error) {
-        const gameStatus = document.getElementById('game-status');
-        gameStatus.innerHTML = `游戏初始化错误: ${error.message}`;
-      }
-    }
-
-    window.onload = initGame;
-  </script>
+    <footer>
+        <p>© 2024 Memory Test. All rights reserved.</p>
+    </footer>
 </body>
 </html> 

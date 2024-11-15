@@ -1,9 +1,0 @@
-fastapi==0.68.0
-uvicorn==0.15.0
-sqlalchemy==1.4.22
-pydantic==1.8.2
-python-jose==3.3.0
-passlib==1.7.4
-psycopg2-binary==2.9.1
-alembic==1.7.1
-pytest==6.2.5 
