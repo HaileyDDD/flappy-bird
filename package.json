@@ -18,9 +18,9 @@
     "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@types/node": "^22.9.0",
-    "@types/react": "^18.3.12",
+    "@types/node": "^20.3.1",
+    "@types/react": "^18.2.6",
     "eslint": "^8.40.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.0.4"
   }
 }
