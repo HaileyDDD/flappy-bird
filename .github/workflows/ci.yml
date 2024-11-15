@@ -1,0 +1,49 @@
+name: 完整CI/CD流程
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    # 前端测试
+    - name: Frontend Test
+      working-directory: ./frontend
+      run: |
+        npm ci
+        npm run lint
+        npm test
+    
+    # 后端测试
+    - name: Backend Test
+      working-directory: ./backend
+      run: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+        pytest
+        
+    # 构建Docker镜像  
+    - name: Build Docker Image
+      run: docker build -t flappy-bird .
+      
+    # 安全扫描
+    - name: Security Scan
+      uses: anchore/scan-action@v3
+      with:
+        image: "flappy-bird:latest"
+        
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy to Production
+      run: |
+        # 部署脚本
+        echo "Deploying to production server"
